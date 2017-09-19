@@ -46,7 +46,7 @@ defmodule PlugMetrics.RuntimeQueries do
   end
 
   defp total_seconds(collection, f) do
-    collection |> Enum.map(f) |> Enum.sum |> native_time_to_seconds
+    collection |> Enum.map(f) |> Enum.reject(&is_nil(&1)) |> Enum.sum |> native_time_to_seconds
   end
 
   defp native_time_to_seconds(time) do
