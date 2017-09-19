@@ -4,45 +4,34 @@ defmodule PlugMetrics.RuntimeTest do
 
   alias PlugMetrics.Runtime
 
-  defmodule TestRouter do
-    use Plug.Router
-
-    plug Runtime
-    plug :match
-    plug :dispatch
-
-    get "/fast" do
-      action(conn)
-    end
-
-    get "/slow" do
-      :timer.sleep(100)
-      action(conn)
-    end
-
-    defp action(conn) do
-      send_resp(conn, 200, "Hello, world!")
-    end
+  defp call_fast(conn) do
+    conn |> Runtime.call(Runtime.init()) |> response
   end
 
-  defp call_test_router(conn) do
-    TestRouter.call(conn, [])
+  defp call_slow(conn) do
+    conn = Runtime.call(conn, Runtime.init())
+
+    :timer.sleep(100)
+
+    response(conn)
   end
 
   defp call(conn, options) do
-    conn
-    |> Runtime.call(Runtime.init(options))
-    |> send_resp(200, "Hello, world!")
+    conn |> Runtime.call(Runtime.init(options)) |> response
+  end
+
+  defp response(conn) do
+    send_resp(conn, 200, "Hello, world!")
   end
 
   test "sets a runtime header for the fast action" do
-    conn = conn(:get, "/fast") |> call_test_router
+    conn = conn(:get, "/") |> call_fast
     [runtime] = get_resp_header(conn, "x-runtime")
     assert runtime |> Float.parse |> elem(0) >= 0
   end
 
   test "sets a runtime header for the slow action" do
-    conn = conn(:get, "/slow") |> call_test_router
+    conn = conn(:get, "/") |> call_slow
     [runtime] = get_resp_header(conn, "x-runtime")
     assert runtime |> Float.parse |> elem(0) >= 100 / 1_000
   end
