@@ -14,15 +14,11 @@ defmodule PlugMetrics.Runtime do
   end
 
   defp put_runtime_header(conn, options) do
-    Conn.put_resp_header(conn, runtime_header(options), runtime_value(conn) |> Float.to_string)
+    Conn.put_resp_header(conn, header_name(options), runtime_value(conn) |> Float.to_string)
   end
 
   defp runtime_value(conn) do
     (timestamp() - conn.assigns[:runtime][:timestamp]) / 1_000.0
-  end
-
-  defp runtime_header(options) do
-    header_name(options)
   end
 
   defp header_name(options) do
