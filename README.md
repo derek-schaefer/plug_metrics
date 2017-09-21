@@ -1,4 +1,4 @@
-# PlugMetrics [![CircleCI](https://img.shields.io/circleci/project/github/derek-schaefer/plug_metrics.svg)](https://circleci.com/gh/derek-schaefer/plug_metrics) 
+# PlugMetrics [![CircleCI](https://img.shields.io/circleci/project/github/derek-schaefer/plug_metrics.svg)](https://circleci.com/gh/derek-schaefer/plug_metrics) [![Hex](https://img.shields.io/hexpm/v/plug_metrics.svg)](https://hex.pm/packages/plug_metrics)
 
 **TODO: Add description**
 
