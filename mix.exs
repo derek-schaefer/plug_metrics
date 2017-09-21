@@ -8,6 +8,8 @@ defmodule PlugMetrics.Mixfile do
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env),
       start_permanent: Mix.env == :prod,
+      description: description(),
+      package: package(),
       deps: deps()
     ]
   end
@@ -24,7 +26,20 @@ defmodule PlugMetrics.Mixfile do
     [
       {:plug, "~> 1.0"},
       {:ecto, "~> 2.0"},
-      {:postgrex, "~> 0.13", only: [:test]}
+      {:postgrex, "~> 0.13", only: [:test]},
+      {:ex_doc, ">= 0.0.0", only: [:dev]}
+    ]
+  end
+
+  defp description() do
+    "Track metrics for your plug requests."
+  end
+
+  defp package() do
+    [
+      maintainers: ["Derek Schaefer"],
+      licenses: ["Apache 2.0"],
+      links: %{"GitHub" => "https://github.com/derek-schaefer/plug_metrics"}
     ]
   end
 
