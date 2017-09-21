@@ -4,8 +4,8 @@ defmodule PlugMetrics.Ecto.RepoTest do
   alias PlugMetrics.{Repo, MetricsServer, MetricsClient, Metric, QueryPayload}
 
   setup do
-    {:ok, _} = Repo.start_link
-    {:ok, _} = MetricsServer.start_link
+    {:ok, _} = start_supervised(Repo, [])
+    {:ok, _} = start_supervised(MetricsServer, [])
 
     :ok
   end

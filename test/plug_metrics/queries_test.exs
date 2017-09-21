@@ -7,8 +7,8 @@ defmodule PlugMetrics.QueriesTest do
   alias PlugMetrics.{Repo, MetricsServer, Queries}
 
   setup do
-    {:ok, _} = Repo.start_link
-    {:ok, _} = MetricsServer.start_link
+    {:ok, _} = start_supervised(Repo, [])
+    {:ok, _} = start_supervised(MetricsServer, [])
 
     :ok
   end

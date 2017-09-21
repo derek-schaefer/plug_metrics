@@ -4,7 +4,7 @@ defmodule PlugMetrics.MetricsServerTest do
   alias PlugMetrics.{MetricsServer, Metric}
 
   setup do
-    {:ok, _} = MetricsServer.start_link
+    {:ok, _} = start_supervised(MetricsServer, [])
 
     :ok
   end
