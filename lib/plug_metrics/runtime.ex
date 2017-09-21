@@ -3,9 +3,7 @@ defmodule PlugMetrics.Runtime do
 
   alias Plug.Conn
 
-  def init(options \\ []) do
-    options
-  end
+  def init(options \\ []), do: options
 
   def call(conn, options) do
     conn

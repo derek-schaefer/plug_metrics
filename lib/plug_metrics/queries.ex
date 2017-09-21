@@ -1,19 +1,21 @@
-defmodule PlugMetrics.RuntimeQueries do
+defmodule PlugMetrics.Queries do
   @behaviour Plug
 
-  alias Plug.Conn
-  alias PlugMetrics.Metrics.QueryMetric
+  require Logger
 
-  def init(options \\ []) do
-    options
-  end
+  alias Plug.Conn
+  alias PlugMetrics.{MetricsClient, Metric, QueryPayload}
+
+  def init(options \\ []), do: options
 
   def call(conn, options) do
+    :ok = MetricsClient.register(options)
+
     Conn.register_before_send(conn, &put_runtime_headers(&1, options))
   end
 
   defp put_runtime_headers(conn, options) do
-    queries = query_metrics()
+    queries = query_metrics(options)
     queries_count = Enum.count(queries)
 
     queue_time = total_seconds(queries, & &1.queue_time)
@@ -37,16 +39,19 @@ defmodule PlugMetrics.RuntimeQueries do
     |> Conn.put_resp_header(prefix <> "-total-time", total_time_value)
   end
 
-  defp query_metrics(metrics \\ []) do
-    receive do
-      %QueryMetric{} = metric -> query_metrics([metric | metrics])
-    after
-      0 -> metrics
-    end
+  defp query_metrics(options) do
+    options
+    |> MetricsClient.pop
+    |> Enum.filter(&match?(%Metric{payload: %QueryPayload{}}, &1))
+    |> Enum.map(& &1.payload)
   end
 
   defp total_seconds(collection, f) do
-    collection |> Enum.map(f) |> Enum.reject(&is_nil(&1)) |> Enum.sum |> native_time_to_seconds
+    collection
+    |> Enum.map(f)
+    |> Enum.reject(&is_nil(&1))
+    |> Enum.sum
+    |> native_time_to_seconds
   end
 
   defp native_time_to_seconds(time) do
@@ -54,7 +59,7 @@ defmodule PlugMetrics.RuntimeQueries do
   end
 
   defp header_name(options) do
-    Keyword.get(options, :http_header, "x-runtime-queries")
+    Keyword.get(options, :http_header, "x-queries")
   end
 
   defp average_time(_, 0), do: 0.0
