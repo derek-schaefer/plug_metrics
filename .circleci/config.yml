@@ -8,6 +8,6 @@ jobs:
     steps:
       - checkout
       - run: mix do local.hex --force, local.rebar --force
-      - run: mix deps.get
+      - run: mix do deps.get, deps.compile, compile
       - run: MIX_ENV=test mix do ecto.create, ecto.migrate
       - run: mix test
