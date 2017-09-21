@@ -19,3 +19,10 @@ Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_do
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/plug_metrics](https://hexdocs.pm/plug_metrics).
 
+## TODO
+- [x] Create and unit test a basic runtime plug
+- [x] Create and unit test a basic queries plug
+- [ ] Ensure that metrics are consumed even if there are errors
+- [ ] Ensure that if the metrics server is unreachable that requests still succeed
+- [ ] Create an example application
+- [ ] Add integration tests
