@@ -4,7 +4,7 @@ defmodule PlugMetrics.Queries do
   require Logger
 
   alias Plug.Conn
-  alias PlugMetrics.{MetricsClient, Metric, QueryPayload}
+  alias PlugMetrics.{MetricsClient, Metric, MetricQueryPayload}
 
   def init(options \\ []), do: options
 
@@ -42,7 +42,7 @@ defmodule PlugMetrics.Queries do
   defp query_metrics(options) do
     options
     |> MetricsClient.pop
-    |> Enum.filter(&match?(%Metric{payload: %QueryPayload{}}, &1))
+    |> Enum.filter(&match?(%Metric{payload: %MetricQueryPayload{}}, &1))
     |> Enum.map(& &1.payload)
   end
 

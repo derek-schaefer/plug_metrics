@@ -1,7 +1,7 @@
 defmodule PlugMetrics.Ecto.RepoTest do
   use ExUnit.Case
 
-  alias PlugMetrics.{Repo, MetricsServer, MetricsClient, Metric, QueryPayload}
+  alias PlugMetrics.{Repo, MetricsServer, MetricsClient, Metric, MetricQueryPayload}
 
   setup do
     {:ok, _} = start_supervised(Repo, [])
@@ -16,7 +16,7 @@ defmodule PlugMetrics.Ecto.RepoTest do
 
       Repo.__log__(%Ecto.LogEntry{caller_pid: self(), queue_time: 1, query_time: 2, decode_time: 3})
 
-      assert MetricsClient.pop == [%Metric{payload: %QueryPayload{queue_time: 1, query_time: 2, decode_time: 3}}]
+      assert MetricsClient.pop == [%Metric{payload: %MetricQueryPayload{queue_time: 1, query_time: 2, decode_time: 3}}]
     end
   end
 end
