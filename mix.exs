@@ -27,6 +27,7 @@ defmodule PlugMetrics.Mixfile do
       {:plug, "~> 1.0"},
       {:ecto, "~> 2.0"},
       {:postgrex, "~> 0.13", only: [:test]},
+      {:credo, ">= 0.0.0", only: [:dev]},
       {:ex_doc, ">= 0.0.0", only: [:dev]}
     ]
   end
