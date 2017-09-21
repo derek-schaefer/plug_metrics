@@ -5,16 +5,16 @@ defmodule PlugMetrics.Runtime do
 
   def init(options \\ []), do: options
 
-  def call(conn, options, timestamp \\ timestamp()) do
-    Conn.register_before_send(conn, &put_runtime_header(&1, timestamp, options))
+  def call(conn, options, start \\ timestamp()) do
+    Conn.register_before_send(conn, &put_runtime_header(&1, start, options))
   end
 
-  defp put_runtime_header(conn, timestamp, options) do
-    Conn.put_resp_header(conn, header_name(options), runtime_value(timestamp) |> Float.to_string)
+  defp put_runtime_header(conn, start, options) do
+    Conn.put_resp_header(conn, header_name(options), runtime_seconds(start) |> Float.to_string)
   end
 
-  defp runtime_value(timestamp) do
-    (timestamp() - timestamp) / 1_000.0
+  defp runtime_seconds(start) do
+    (timestamp() - start) / 1_000.0
   end
 
   defp header_name(options) do
